@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L'Essence - Perfumería de Lujo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #f9f8f6;
+        }
+        h1, h2, h3, .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        /* Capa de fondo global con Parallax */
+        #global-parallax-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 120vh;
+            z-index: -2;
+            background-image: url('https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&q=80&w=1920'); /* Imagen de textura suave/seda */
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15; /* Muy sutil para no distraer */
+            will-change: transform;
+        }
+
+        .luxury-gradient {
+            background: linear-gradient(135deg, #1a1a1a 0%, #3d3d3d 100%);
+        }
+        .gold-text {
+            color: #d4af37;
+        }
+        .gold-bg {
+            background-color: #d4af37;
+        }
+        .gold-border {
+            border-color: #d4af37;
+        }
+        .product-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(5px);
+        }
+        .product-card:hover .cart-overlay {
+            opacity: 1;
+        }
+        .cart-sidebar {
+            transition: transform 0.3s ease-in-out;
+            z-index: 1000;
+        }
+        .hidden-sidebar {
+            transform: translateX(100%);
+        }
+
+        /* Estilos para el efecto Parallax en elementos específicos */
+        .parallax-container {
+            position: relative;
+            overflow: hidden;
+        }
+        .parallax-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 130%;
+            z-index: -1;
+            will-change: transform;
+        }
+        .parallax-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body class="text-stone-900">
+
+    <!-- Fondo Fijo con Movimiento -->
+    <div id="global-parallax-bg"></div>
+
+    <!-- Navegación -->
+    <nav class="fixed w-full z-50 bg-white/80 backdrop-blur-lg border-b border-stone-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0">
+                    <h1 class="text-3xl font-bold tracking-tighter gold-text">L'ESSENCE</h1>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8 font-medium uppercase text-sm tracking-widest">
+                        <a href="#inicio" class="hover:text-[#d4af37] transition-colors">Inicio</a>
+                        <a href="#catalogo" class="hover:text-[#d4af37] transition-colors">Fragancias</a>
+                        <a href="#nosotros" class="hover:text-[#d4af37] transition-colors">Nosotros</a>
+                        <a href="#contacto" class="hover:text-[#d4af37] transition-colors">Contacto</a>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button onclick="toggleCart()" class="relative p-2 hover:text-[#d4af37] transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                        </svg>
+                        <span id="cart-count" class="absolute top-0 right-0 bg-[#d4af37] text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section con Parallax -->
+    <header id="inicio" class="relative h-screen flex items-center justify-center overflow-hidden parallax-container">
+        <div class="parallax-bg" id="hero-parallax">
+            <img src="https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&q=80&w=1920" alt="Perfume Luxury" class="parallax-image">
+            <div class="absolute inset-0 bg-black/40"></div>
+        </div>
+        <div class="relative z-10 text-center text-white px-4">
+            <h2 class="text-5xl md:text-7xl font-serif mb-6 opacity-0 translate-y-4 transition-all duration-1000 ease-out" id="hero-title">El Arte de la Seducción</h2>
+            <p class="text-xl md:text-2xl mb-10 font-light tracking-wide max-w-2xl mx-auto opacity-0 translate-y-4 transition-all duration-1000 delay-300 ease-out" id="hero-subtitle">Fragancias exclusivas que cuentan tu historia sin decir una palabra.</p>
+            <a href="#catalogo" class="inline-block border-2 border-[#d4af37] text-[#d4af37] px-10 py-4 uppercase text-sm tracking-widest font-bold hover:bg-[#d4af37] hover:text-white transition-all duration-300">Explorar Colección</a>
+        </div>
+    </header>
+
+    <!-- Filtros y Catálogo -->
+    <main id="catalogo" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 relative z-10">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl font-serif mb-4">Nuestras Fragancias</h2>
+            <div class="w-24 h-1 gold-bg mx-auto"></div>
+        </div>
+
+        <!-- Filtros -->
+        <div class="flex flex-wrap justify-center gap-4 mb-12">
+            <button onclick="filterProducts('all')" class="filter-btn active border-b-2 gold-border px-6 py-2 uppercase text-xs tracking-widest font-bold">Todos</button>
+            <button onclick="filterProducts('hombre')" class="filter-btn px-6 py-2 uppercase text-xs tracking-widest font-bold text-stone-500 hover:text-stone-900">Hombre</button>
+            <button onclick="filterProducts('mujer')" class="filter-btn px-6 py-2 uppercase text-xs tracking-widest font-bold text-stone-500 hover:text-stone-900">Mujer</button>
+            <button onclick="filterProducts('unisex')" class="filter-btn px-6 py-2 uppercase text-xs tracking-widest font-bold text-stone-500 hover:text-stone-900">Unisex</button>
+        </div>
+
+        <!-- Grid de Productos -->
+        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            <!-- Los productos se cargarán dinámicamente -->
+        </div>
+    </main>
+
+    <!-- Sección Nosotros con sutil Parallax -->
+    <section id="nosotros" class="bg-stone-100/60 backdrop-blur-sm py-24 overflow-hidden relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-12 items-center">
+            <div class="relative h-[500px] overflow-hidden rounded-lg shadow-2xl">
+                <div class="parallax-bg" id="about-parallax">
+                    <img src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&q=80&w=1200" alt="Proceso de Perfume" class="parallax-image">
+                </div>
+            </div>
+            <div class="space-y-6">
+                <h2 class="text-4xl font-serif">Más que un aroma, una identidad</h2>
+                <p class="text-stone-600 leading-relaxed">En L'Essence, seleccionamos cuidadosamente cada esencia de las casas perfumistas más prestigiosas del mundo. Nuestra misión es ayudarte a encontrar esa fragancia que resuene con tu personalidad y deje una huella inolvidable.</p>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="p-4 bg-white/80 border-l-4 gold-border shadow-sm">
+                        <p class="font-bold text-xl">100% Original</p>
+                        <p class="text-xs text-stone-500">Garantía total de autenticidad.</p>
+                    </div>
+                    <div class="p-4 bg-white/80 border-l-4 gold-border shadow-sm">
+                        <p class="font-bold text-xl">Envío Express</p>
+                        <p class="text-xs text-stone-500">Recibe en 24 a 48 horas.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer / Contacto -->
+    <footer id="contacto" class="luxury-gradient text-white pt-20 pb-10 relative z-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
+                <div>
+                    <h3 class="text-2xl font-bold mb-6 gold-text">L'ESSENCE</h3>
+                    <p class="text-stone-400 mb-6">La excelencia en perfumería fina a un clic de distancia.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="hover:text-[#d4af37] transition-colors">Instagram</a>
+                        <a href="#" class="hover:text-[#d4af37] transition-colors">Facebook</a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-6 uppercase tracking-widest">Contacto</h4>
+                    <p class="text-stone-400 mb-2">Showroom: Av. Lujo 123, Ciudad Elegante</p>
+                    <p class="text-stone-400 mb-2">Email: info@lessence.com</p>
+                    <p class="text-stone-400 mb-6">Horario: Lunes a Sábados 10am - 8pm</p>
+                    <button onclick="whatsappDirect()" class="flex items-center space-x-2 bg-green-600 hover:bg-green-700 px-6 py-3 rounded-full transition-all">
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12.031 6.172c-2.202 0-3.991 1.786-3.991 3.987 0 .805.239 1.556.647 2.189l-.683 2.503 2.565-.672c.604.364 1.304.577 2.054.577 2.203 0 3.992-1.788 3.992-3.987s-1.789-3.987-3.992-3.987h.008zm5.558 12.147c-2.222 2.221-5.825 2.221-8.046 0-1.077-1.077-1.67-2.511-1.67-4.041 0-.961.233-1.896.674-2.742l-.841 3.084 3.149-.824c.813.418 1.716.639 2.631.639 3.12 0 5.66-2.54 5.66-5.66 0-1.512-.589-2.933-1.657-4.001-2.222-2.222-5.825-2.222-8.046 0-1.068 1.068-1.657 2.489-1.657 4.001 0 .961.233 1.896.674 2.742l-.841 3.084 3.149-.824c.813.418 1.716.639 2.631.639 3.12 0 5.66-2.54 5.66-5.66 0-3.12-2.54-5.66-5.66-5.66z"/></svg>
+                        <span>Escríbenos por WhatsApp</span>
+                    </button>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-6 uppercase tracking-widest">Boletín</h4>
+                    <p class="text-stone-400 mb-4">Suscríbete para recibir ofertas exclusivas.</p>
+                    <div class="flex">
+                        <input type="email" placeholder="Tu email" class="bg-stone-800 border-none px-4 py-3 flex-grow focus:ring-1 focus:ring-[#d4af37] outline-none">
+                        <button class="gold-bg px-6 py-3 font-bold hover:brightness-110 transition-all">OK</button>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-stone-800 pt-8 text-center text-stone-500 text-sm">
+                <p>&copy; 2024 L'ESSENCE Perfumería. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Sidebar del Carrito -->
+    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full sm:w-96 bg-white shadow-2xl cart-sidebar hidden-sidebar">
+        <div class="flex flex-col h-full">
+            <div class="p-6 border-b border-stone-200 flex justify-between items-center">
+                <h3 class="text-xl font-bold uppercase tracking-widest">Tu Carrito</h3>
+                <button onclick="toggleCart()" class="p-2 hover:bg-stone-100 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div id="cart-items" class="flex-grow overflow-y-auto p-6 space-y-4">
+                <p class="text-stone-500 text-center py-10">El carrito está vacío</p>
+            </div>
+            <div class="p-6 border-t border-stone-200 bg-stone-50">
+                <div class="flex justify-between items-center mb-6">
+                    <span class="text-stone-600 uppercase tracking-widest text-sm">Subtotal</span>
+                    <span id="cart-total" class="text-2xl font-bold">$0.00</span>
+                </div>
+                <button onclick="checkoutWhatsApp()" class="w-full luxury-gradient text-white py-4 font-bold uppercase tracking-widest hover:brightness-125 transition-all mb-3">
+                    Finalizar Pedido vía WhatsApp
+                </button>
+                <button onclick="clearCart()" class="w-full border border-stone-300 py-2 text-stone-500 text-xs uppercase font-bold hover:bg-stone-100 transition-all">
+                    Vaciar Carrito
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay -->
+    <div id="cart-overlay" onclick="toggleCart()" class="fixed inset-0 bg-black/50 z-[999] hidden"></div>
+
+    <script>
+        const products = [
+            { id: 1, name: "Noir Elixir", brand: "L'Essence", price: 125.00, gender: "hombre", image: "https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&q=80&w=400" },
+            { id: 2, name: "Rose D'Or", brand: "L'Essence", price: 140.00, gender: "mujer", image: "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&q=80&w=400" },
+            { id: 3, name: "Oceanic Blue", brand: "L'Essence", price: 95.00, gender: "hombre", image: "https://images.unsplash.com/photo-1557170334-a9632e77c6e4?auto=format&fit=crop&q=80&w=400" },
+            { id: 4, name: "Santal 33", brand: "L'Essence", price: 180.00, gender: "unisex", image: "https://images.unsplash.com/photo-1590736704728-f4730bb30770?auto=format&fit=crop&q=80&w=400" },
+            { id: 5, name: "Amber Wood", brand: "L'Essence", price: 110.00, gender: "unisex", image: "https://images.unsplash.com/photo-1615484477778-ca3b77940c25?auto=format&fit=crop&q=80&w=400" },
+            { id: 6, name: "Jasmine Night", brand: "L'Essence", price: 115.00, gender: "mujer", image: "https://images.unsplash.com/photo-1595425970377-c9703cf48b6d?auto=format&fit=crop&q=80&w=400" },
+            { id: 7, name: "Midnight Oud", brand: "L'Essence", price: 210.00, gender: "hombre", image: "https://images.unsplash.com/photo-1588405864443-f111dec35a78?auto=format&fit=crop&q=80&w=400" },
+            { id: 8, name: "Petals & Silk", brand: "L'Essence", price: 88.00, gender: "mujer", image: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&q=80&w=400" }
+        ];
+
+        let cart = [];
+        const WHATSAPP_NUMBER = "573000000000";
+
+        window.onload = () => {
+            renderProducts(products);
+            
+            setTimeout(() => {
+                document.getElementById('hero-title').style.opacity = '1';
+                document.getElementById('hero-title').style.transform = 'translateY(0)';
+            }, 300);
+            setTimeout(() => {
+                document.getElementById('hero-subtitle').style.opacity = '1';
+                document.getElementById('hero-subtitle').style.transform = 'translateY(0)';
+            }, 600);
+
+            // Listener de Scroll para el efecto Parallax GLOBAL y Local
+            window.addEventListener('scroll', () => {
+                const scrolled = window.pageYOffset;
+                
+                // 1. Parallax Global (El fondo de toda la página)
+                const globalBg = document.getElementById('global-parallax-bg');
+                globalBg.style.transform = `translateY(${scrolled * 0.15}px)`;
+
+                // 2. Parallax en Hero
+                const heroParallax = document.getElementById('hero-parallax');
+                if (heroParallax) {
+                    heroParallax.style.transform = `translateY(${scrolled * 0.4}px)`;
+                }
+
+                // 3. Parallax en sección Nosotros
+                const aboutParallax = document.getElementById('about-parallax');
+                if (aboutParallax) {
+                    const aboutRect = aboutParallax.parentElement.getBoundingClientRect();
+                    if (aboutRect.top < window.innerHeight && aboutRect.bottom > 0) {
+                        const offset = (window.innerHeight - aboutRect.top) * 0.15;
+                        aboutParallax.style.transform = `translateY(${offset}px)`;
+                    }
+                }
+            });
+        };
+
+        function renderProducts(items) {
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = '';
+            items.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'group relative overflow-hidden product-card border border-stone-100 shadow-sm hover:shadow-xl transition-all duration-500 rounded-lg';
+                card.innerHTML = `
+                    <div class="relative h-80 overflow-hidden">
+                        <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute top-4 right-4 bg-white/90 px-3 py-1 text-[10px] uppercase font-bold tracking-widest text-stone-500">${product.gender}</div>
+                        <div class="cart-overlay absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 transition-opacity duration-300">
+                            <button onclick="addToCart(${product.id})" class="bg-white text-stone-900 px-6 py-3 font-bold uppercase text-xs tracking-widest hover:gold-bg hover:text-white transition-all">
+                                Añadir al Carrito
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-6 text-center">
+                        <p class="text-[10px] uppercase tracking-[0.2em] text-stone-400 mb-1">${product.brand}</p>
+                        <h3 class="text-lg font-serif mb-2">${product.name}</h3>
+                        <p class="font-bold gold-text">$${product.price.toFixed(2)}</p>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // --- Resto de funciones del carrito y filtros (se mantienen iguales) ---
+        function filterProducts(category) {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active', 'border-b-2', 'gold-border', 'text-stone-900');
+                btn.classList.add('text-stone-500');
+            });
+            event.currentTarget.classList.add('active', 'border-b-2', 'gold-border', 'text-stone-900');
+            event.currentTarget.classList.remove('text-stone-500');
+            category === 'all' ? renderProducts(products) : renderProducts(products.filter(p => p.gender === category));
+        }
+
+        function toggleCart() {
+            document.getElementById('cart-sidebar').classList.toggle('hidden-sidebar');
+            document.getElementById('cart-overlay').classList.toggle('hidden');
+        }
+
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const existing = cart.find(item => item.id === productId);
+            existing ? existing.quantity++ : cart.push({ ...product, quantity: 1 });
+            updateCartUI();
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCartUI();
+        }
+
+        function clearCart() {
+            cart = [];
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const container = document.getElementById('cart-items');
+            const countLabel = document.getElementById('cart-count');
+            const totalLabel = document.getElementById('cart-total');
+            let total = 0; let count = 0;
+
+            if (cart.length === 0) {
+                container.innerHTML = '<p class="text-stone-500 text-center py-10">El carrito está vacío</p>';
+            } else {
+                container.innerHTML = '';
+                cart.forEach(item => {
+                    total += item.price * item.quantity;
+                    count += item.quantity;
+                    const el = document.createElement('div');
+                    el.className = 'flex items-center space-x-4 border-b border-stone-100 pb-4';
+                    el.innerHTML = `
+                        <img src="${item.image}" class="w-16 h-16 object-cover rounded shadow-sm">
+                        <div class="flex-grow">
+                            <h4 class="font-bold text-sm text-stone-800">${item.name}</h4>
+                            <p class="text-xs text-stone-500">$${item.price.toFixed(2)} x ${item.quantity}</p>
+                        </div>
+                        <button onclick="removeFromCart(${item.id})" class="text-stone-300 hover:text-red-500 transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                        </button>
+                    `;
+                    container.appendChild(el);
+                });
+            }
+            countLabel.textContent = count;
+            totalLabel.textContent = `$${total.toFixed(2)}`;
+        }
+
+        function checkoutWhatsApp() {
+            if (cart.length === 0) return;
+            let message = "¡Hola L'Essence! 👋 Pedido:\n" + cart.map(i => `- ${i.name} (${i.quantity} und)`).join('\n');
+            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        function whatsappDirect() {
+            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=Hola!`, '_blank');
+        }
+    </script>
+</body>
+</html>
